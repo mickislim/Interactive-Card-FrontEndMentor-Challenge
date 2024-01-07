@@ -1,46 +1,82 @@
-
-
 import React from 'react'
+import Modal from './Modal'
+import { useGlobalContext } from '../Context'
 
-const Form = ({handleSubmit,handleChange, cvcErrorShow,cvcErrorMsg,cvcErrorType ,expDateErrorMsg, expDateErrorShow, expDateErrorType,nameErrorMsg,nameErrorShow,nameErrorType,user, cardNumberErrorShow, cardNumberErrorType, cardNumberErrorMsg}) => {
+
+
+
+
+const Form = () => {
+  const {isModalOpen,handleSubmit,handleChange,nameError,cardNumberError,expDateError, cvcNumberError,showError}= useGlobalContext()
+
+  
+     
+  
   return (
-    <div className="form-register ">
-         <form className="form show-form "  onSubmit={handleSubmit}> 
-                 <div>  <label htmlFor="name">CARDHOLDER NAME</label>
-                   <input type='text' name='name' maxLength={20} className={nameErrorShow? `error` : null} onChange={handleChange} placeholder="e.g Jane Appleseed"/> </div>
-                   {nameErrorShow && <p className={nameErrorType} >{nameErrorMsg}</p>}
-      
-                   <div>  <label htmlFor='cardNumber'>CARD NUMBER</label>
-                     <input  type='text' maxLength={16} name='cardNumber' className={cardNumberErrorShow? `error` : null}  onChange={handleChange} placeholder="e.g 1234 5678 9000"/> </div>
-                     {cardNumberErrorMsg && <p className={cardNumberErrorType} >{cardNumberErrorMsg}</p>}
-      
-                
-                     <div >  <label htmlFor="Exp-date">EXP. DATE (MM/YY) <span>CVC</span></label>
-                       <div className="exp-input">
-                         <input  type='text' name='expMonth' maxLength={2} className={expDateErrorShow? `error` : null} onChange={handleChange} placeholder="MM"/> 
-                         <input  type='text' name='expYear'  maxLength={2} className={expDateErrorShow? `error` : null}  onChange={handleChange} placeholder=" YY"/> 
-                       
-                      
-                     <input  type='text' name='cvc' maxLength={3} className={cvcErrorShow? `error` : null} onChange={handleChange} placeholder="e.g 123"/>
-                     
-                       
-                       </div>
-                       <div className='alert'>
-                       {expDateErrorShow && <p className={expDateErrorType} >{expDateErrorMsg}</p>}
-                       {cvcErrorShow && <p className={cvcErrorType} >{cvcErrorMsg}</p>}
-      
-        </div>
-                       </div>
-               <div className="btn-container">
-                 <button className="btn" type='submit' >Confirm</button>
-               </div>
-                      
-      
-               </form>  
-        </div>
-      
+<div className='form'>
+  {isModalOpen?( <Modal/>) : (
+<form onSubmit={handleSubmit}>
+    <div>
+    <label className="form-label" htmlFor='cardHolder'>CARDHOLDER NAME</label>
+    <input className={nameError.show? 'error' : 'input'} name='cardHolder' id='cardHolder' type="text" placeholder=" e.g Jane Appleseed"  onChange={handleChange} maxLength={20}/>
+    { showError && <div className={nameError.type}> <p>{nameError.msg}</p></div> } 
 
-  )
+  </div>
+
+  <div>
+    <label className="form-label" htmlFor='cardNumber' >CARD NUMBER</label>
+    <input  className={cardNumberError.show? 'error' : 'input'} name='cardNumber' id='cardNumber' type="text" placeholder=" e.g 1234 5678 9123 0000" onChange={handleChange} maxLength={16}/>
+     { showError && <div className={cardNumberError.type}> <p>{cardNumberError.msg}</p></div> }  
+
+</div>
+
+<div>
+  <label className="form-label"  htmlFor='expDate' >EXP. DATE (MM/YY) <span>CVC</span></label>
+  
+  <div>
+  <div className="cvc-input ">
+    <div className="exp-input"> 
+     <div >
+      <input className={expDateError.show? 'error' :null} type="text" placeholder=" MM" id='expMonth' name='expMonth' onChange={handleChange} maxLength={2}/>
+     </div>
+     
+     <div>
+      <input className={expDateError.show? 'error' :null} id='expYear' name='expYear' type="text" placeholder=" YY" onChange={handleChange} maxLength={2}/>
+  
+    </div>
+    
+   
+
+    
+    
+     </div>
+
+    
+     
+  
+    <div className="cvc-number-input " > 
+      <input className={cvcNumberError.show? 'error' : 'input'} id='cvcNumber' name='cvcNumber' type="text" placeholder=" e.g 123" onChange={handleChange} maxLength={3}/>    </div>
+  </div>
+  <div className="alert-message">
+    {expDateError.show &&  <div className={expDateError.type}> <p>{expDateError.msg}</p></div> }
+    { showError && <div className={cvcNumberError.type}> <p>{cvcNumberError.msg}</p></div> }  
+
+  
+</div>  
+  </div>
+ 
+
+    </div>
+
+    <div className="btn-container">
+      <button type='submit' className="confirm-btn">Confirm</button>
+  </div>
+
+</form>)}
+
+
+</div> 
+ )
 }
 
 export default Form
